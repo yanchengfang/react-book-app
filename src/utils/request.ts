@@ -16,14 +16,14 @@ const instance: AxiosInstanceType = axios.create({
 })
 
 instance.interceptors.request.use((config) => {
-  console.log(config, "请求拦截器==>")
+  // console.log(config, "请求拦截器==>")
   return config;
 }, (error) => {
    return Promise.reject(error)
 })
 
 instance.interceptors.response.use((response) => {
-  console.log(response, "响应拦截器<==")
+  // console.log(response, "响应拦截器<==")
   const { data, status } = response
   if (status === 200) {
     return data

@@ -29,8 +29,8 @@
 
 .content {
   width: 100%;
-  background-color: #dfdede;
-  /* background-color: #fff; */
+  /* background-color: #dfdede; */
+  background-color: #fff;
   border-radius: 5px;
   padding: 24px;
 }

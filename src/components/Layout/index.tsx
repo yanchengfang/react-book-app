@@ -30,7 +30,11 @@ const ITEMS = [
   {
     label: "分类管理",
     // icon: "",
-    key: "/category",
+    key: "category",
+    children: [
+      { label: "借阅列表", key: "/category" },
+      { label: "书籍借阅", key: "/category/add" }
+    ]
   },
   {
     label: "用户管理",
@@ -59,7 +63,7 @@ const LayoutMain: React.FC<PropsWithChildren> = ({children}) => {
   const routerLocation = useLocation()
   const activeMenu = routerLocation.pathname
   const defaultOpenKeys = [activeMenu.split("/")[1]];
-  console.log("🚀 ~ LayoutMain ~ activeMenu:", activeMenu)
+  console.log("🚀 ~ LayoutMain ~ activeMenu:",routerLocation, activeMenu)
   // 点击菜单跳转
   const handleMenuClick: MenuProps["onClick"] = ({key}) => {
     router(key)

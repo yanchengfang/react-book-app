@@ -10,11 +10,10 @@ export type RouteConfig = {
 export const ROUTES = {
   HOME: "/",
   BOOK: "/book",
-  BOOKADD: "/book/add",
+  EDIT: "edit/:id",
+  ADD: "add",
   CATEDORY: "/category",
   BORROW: "/borrow",
-  BORROWADD: "/borrow/add",
   LOGIN: "/login",
   USER: "/user",
-  USERADD: "/user/add"
 }

@@ -2,11 +2,13 @@ import { createBrowserRouter, Navigate } from "react-router-dom"
 import { ROUTES } from '../types/routes'
 import App from '../App.tsx'
 import Book from '@/pages/Book'
+import BookEdit from '@/pages/Book/edit'
 import BookAdd from '@/pages/Book/add'
 import Borrow from '@/pages/Borrow'
 import BorrowAdd from '@/pages/Borrow/add'
 import Login from '@/pages/Login'
 import Category from '@/pages/Category'
+import CategoryAdd from '@/pages/Category/add'
 import User from '@/pages/User'
 import UserAdd from '@/pages/User/add'
 
@@ -40,7 +42,11 @@ const router = createBrowserRouter([
             element: <Book />,
           },
           {
-            path: ROUTES.BOOKADD,
+            path: ROUTES.EDIT,
+            element: <BookEdit />,
+          },
+          {
+            path: ROUTES.ADD,
             element: <BookAdd />,
           }
         ]
@@ -60,7 +66,16 @@ const router = createBrowserRouter([
       },
       {
         path: ROUTES.CATEDORY,
-        element: <Category />
+        children: [
+          {
+            path: ROUTES.CATEDORY,
+            element: <Category />,
+          },
+          {
+            path: ROUTES.CATEDORYADD,
+            element: <CategoryAdd />,
+          }
+        ]
       },
       {
         path: ROUTES.LOGIN,

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { bookAdd } from "../../api/book"
+import { bookAdd, getCategoryList } from "../../api"
 import {
   Button,
   Image,
@@ -25,34 +24,73 @@ import {
   Upload,
   message,
 } from 'antd';
-import type { BookType } from '../../types';
+import type { BookType, CategoryType, ResType } from '../../types';
 import { Content } from '../Content';
+import defaultPic from '../../assets/default-book-pic.png'
 import dayjs from 'dayjs';
 
-const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-export const BookForm: React.FC = ({title}) => {
+interface IProps {
+  title: string;
+  editData?: BookType;
+}
+
+export const BookForm: React.FC<IProps> = ({title, editData}) => {
+  // const messageApi = useMessage()
   const [form] = Form.useForm();
   const router = useNavigate()
   const [preview, setPreview] = useState("");
+  const [categoryList, setCategoryList] = useState<{label: string, value: string | undefined}[]>([]);
+  // const [showCategory, setShowCategory] = useState<CategoryType["_id"]>()
+  const [cover, setCover] = useState<CategoryType["cover"]>()
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true)
+    getCategoryList({
+      all: true,
+    }).then((res) => {
+      const { data } = res as ResType<CategoryType>
+      const selectList = data.map((i: CategoryType) => ({label: i.name, value: i._id}))
+      setCategoryList(selectList);
+      setLoading(false)
+    });
+  }, []);
+
+  useEffect(() => {
+    if (editData) {
+      const data = {
+        ...editData,
+        category: editData.category
+          ? (editData.category as unknown as CategoryType)._id
+          : categoryList[0]?.value, // 默认展示第一项
+        publishAt: editData.publishAt ? dayjs(editData.publishAt) : undefined,
+        cover: defaultPic, // mock数据
+      };
+      setCover(defaultPic);
+      form.setFieldsValue(data);
+    }
+  }, [categoryList, editData, form]);
 
   const handleFinish = async (values: BookType) => {
     if(values.publishAt) {
       values.publishAt = dayjs(values.publishAt).valueOf()
     }
     await bookAdd(values)
-    message.success("创建成功")
+    message.success("提交成功")
     router("/book")
   }
+
   return (
-    <Content title="图书添加" >
+    <Content title={title} >
       <Form
         style={{padding: "32px"}}
         form={form}
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 12 }}
         layout="horizontal"
+        initialValues={editData? editData : {}}
         onFinish={handleFinish}
       >
         <Form.Item 
@@ -88,12 +126,17 @@ export const BookForm: React.FC = ({title}) => {
             }
           ]}
         >
-          <Select options={[{ label: 'Demo', value: 'demo' }]} />
+          <Select
+            loading={loading} 
+            options={categoryList}
+            optionLabelProp='label'
+          />
         </Form.Item>
         <Form.Item label="封面" name="cover">
           <Space.Compact style={{ width: "100%" }}>
             <Input
               style={{ width: "100%" }}
+              value={cover}
               onChange={(e) => {
                 form.setFieldValue("cover", e.target.value);
               }}
@@ -117,14 +160,20 @@ export const BookForm: React.FC = ({title}) => {
           <InputNumber placeholder="请输入" />
         </Form.Item>
         <Form.Item label="描述" name="description">
-          <TextArea placeholder="请输入" />
+          <TextArea 
+            placeholder="请输入" 
+            showCount
+            maxLength={200}
+            style={{ height: 150, resize: 'none' }}
+          />
         </Form.Item>
-        <Form.Item wrapperCol={{ offset: 9 }}>
+        <Form.Item wrapperCol={{ offset: 4 }}>
           <Button
+            style={{width: "200px"}}
             size="large"
             type="primary" 
             htmlType="submit"
-          >Submit</Button>
+          >提 交</Button>
         </Form.Item>
       </Form>
     </Content>
