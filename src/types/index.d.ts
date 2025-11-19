@@ -1,3 +1,5 @@
 export * from './book'
 export * from './category'
 export * from './api'
+export * from './borrow'
+export * from './user'

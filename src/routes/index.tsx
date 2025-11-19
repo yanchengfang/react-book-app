@@ -5,11 +5,12 @@ import Book from '@/pages/Book'
 import BookEdit from '@/pages/Book/edit'
 import BookAdd from '@/pages/Book/add'
 import Borrow from '@/pages/Borrow'
+import BorrowEdit from '@/pages/Borrow/edit'
 import BorrowAdd from '@/pages/Borrow/add'
 import Login from '@/pages/Login'
 import Category from '@/pages/Category'
-import CategoryAdd from '@/pages/Category/add'
 import User from '@/pages/User'
+import UserEdit from '@/pages/User/edit'
 import UserAdd from '@/pages/User/add'
 
 
@@ -59,27 +60,18 @@ const router = createBrowserRouter([
             element: <Borrow />,
           },
           {
-            path: ROUTES.BORROWADD,
+            path: ROUTES.EDIT,
+            element: <BorrowEdit />,
+          },
+          {
+            path: ROUTES.ADD,
             element: <BorrowAdd />,
           }
         ]
       },
       {
         path: ROUTES.CATEDORY,
-        children: [
-          {
-            path: ROUTES.CATEDORY,
-            element: <Category />,
-          },
-          {
-            path: ROUTES.CATEDORYADD,
-            element: <CategoryAdd />,
-          }
-        ]
-      },
-      {
-        path: ROUTES.LOGIN,
-        element: <Login />
+        element: <Category />
       },
       {
         path: ROUTES.USER,
@@ -89,7 +81,11 @@ const router = createBrowserRouter([
             element: <User />,
           },
           {
-            path: ROUTES.USERADD,
+            path: ROUTES.EDIT,
+            element: <UserEdit />,
+          },
+          {
+            path: ROUTES.ADD,
             element: <UserAdd />,
           }
         ]
@@ -99,6 +95,10 @@ const router = createBrowserRouter([
         element: <Navigate to={ROUTES.HOME} replace />
       }
     ]
-  }
+  },
+  {
+    path: ROUTES.LOGIN,
+    element: <Login />
+  },
 ]);
 export default router;

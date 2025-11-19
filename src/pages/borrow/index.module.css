@@ -7,6 +7,6 @@
   height: calc(100% - 80px);
 }
 
-.btnWrap {
-  margin-bottom: 24px;
+.publishAt {
+  width: 100%;
 }

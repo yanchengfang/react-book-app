@@ -1,17 +1,25 @@
 import React, { type PropsWithChildren } from "react";
-import { LaptopOutlined, NotificationOutlined, UserOutlined, DownOutlined } from '@ant-design/icons';
+import { 
+  LaptopOutlined,
+  UserOutlined, 
+  DownOutlined, 
+  SnippetsOutlined, 
+  SolutionOutlined, 
+  ProfileOutlined, 
+  LogoutOutlined
+} from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { Breadcrumb, Layout as AntdLayout, Menu, theme, Dropdown, Space } from 'antd';
-import type { couldHasProps } from '../../types/componentTypes';
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom';
+import { Breadcrumb, Layout as AntdLayout, Menu, theme, Dropdown, Space, message } from 'antd';
 import styles from './index.module.css'
 import bookLogo from '@/assets/book-logo.svg'
+import { setLogout } from "../../api";
 const { Header, Content, Sider } = AntdLayout;
 
 const ITEMS = [
   {
     label: "图书管理",
-    // icon: "",
+    icon: <SnippetsOutlined />,
     key: "book",
     children: [
       { label: "图书列表", key: "/book" },
@@ -20,7 +28,7 @@ const ITEMS = [
   },
   {
     label: "借阅管理",
-    // icon: "",
+    icon: <SolutionOutlined />,
     key: "borrow",
     children: [
       { label: "借阅列表", key: "/borrow" },
@@ -29,16 +37,12 @@ const ITEMS = [
   },
   {
     label: "分类管理",
-    // icon: "",
-    key: "category",
-    children: [
-      { label: "借阅列表", key: "/category" },
-      { label: "书籍借阅", key: "/category/add" }
-    ]
+    icon: <ProfileOutlined />,
+    key: "category"
   },
   {
     label: "用户管理",
-    // icon: "",
+    icon: <UserOutlined />,
     key: "user",
     children: [
       { label: "用户列表", key: "/user" },
@@ -46,17 +50,6 @@ const ITEMS = [
     ]
   },
 ]
-
-const USER_ITEMS: MenuProps["items"] = [
-  {
-    label: "用户中心",
-    key: "1",
-  },
-  {
-    label: "登出",
-    key: "2",
-  }
-];
 
 const LayoutMain: React.FC<PropsWithChildren> = ({children}) => {
   const router = useNavigate()
@@ -76,6 +69,31 @@ const LayoutMain: React.FC<PropsWithChildren> = ({children}) => {
     // // 后退
     // navigate(-1);
   }
+
+  const USER_ITEMS: MenuProps["items"] = [
+    {
+      key: "1",
+      icon: <UserOutlined />,
+      label: <Link to={`/user/edit/38`}>个人中心</Link>,
+    },
+    {
+      key: "2",
+      icon: <LogoutOutlined />,
+      label: (
+        <span
+          onClick={async () => {
+            await setLogout();
+            localStorage.removeItem("user");
+            message.success("退出成功");
+            router("/login");
+          }}
+        >
+          退出
+        </span>
+      ),
+    },
+  ];
+  
   return (
     <>
       <AntdLayout className={styles.container}>
